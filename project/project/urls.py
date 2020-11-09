@@ -9,6 +9,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('notes.urls')),
     path('register', user_views.register, name='register'),
+    path('registerTeacher',
+         user_views.registerTeacher, name='registerTeacher'),
+    path('registerStudent',
+         user_views.registerStudent, name='registerStudent'),
     path('login/', auth_views.LoginView.as_view(
         template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(

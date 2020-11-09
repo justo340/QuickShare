@@ -1,20 +1,53 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm, ProfileUpdateForm, UpdateForm
+from .forms import (
+                    TeacherRegisterForm,
+                    ProfileUpdateForm,
+                    UpdateForm,
+                    StudentRegisterForm
+                    )
+from .models import User
 
 
 def register(request):
+    return render(request, 'users/register.html')
+
+
+def registerTeacher(request):
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = TeacherRegisterForm(request.POST)
         if form.is_valid():
+            user = User
+            user.is_Teacher = True
             form.save()
-            username = form.cleaned_data.get('username')
-            messages.success = (request, f'Your account has been created! You are now able to Login')
+            messages.success = (
+                request,
+                f'Your account has been created! You are now able to Login')
+            user = User
+            user.is_Teacher = True
             return redirect('login')
     else:
-        form = RegisterForm()
-    return render(request, 'users/register.html', {'form': form})
+        form = TeacherRegisterForm()
+    return render(request, 'users/teacher_register.html', {'form': form})
+
+
+def registerStudent(request):
+    if request.method == 'POST':
+        form = StudentRegisterForm(request.POST)
+        if form.is_valid():
+            user = User
+            user.is_Student = True
+            form.save()
+            messages.success = (
+                request,
+                f'Your account has been created! You are now able to Login')
+            user = User
+            user.is_Student = True
+            return redirect('login')
+    else:
+        form = StudentRegisterForm()
+    return render(request, 'users/student_register.html', {'form': form})
 
 
 @login_required
